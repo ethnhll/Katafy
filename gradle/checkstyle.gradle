@@ -1,0 +1,11 @@
+checkstyle {
+    toolVersion '8.29'
+//    config = resources.text.fromUri('GITHUB RESOURCE URI TO rules')
+    // defer failures
+    ignoreFailures true
+}
+
+task style {
+    dependsOn checkstyleMain
+    dependsOn checkstyleTest
+}

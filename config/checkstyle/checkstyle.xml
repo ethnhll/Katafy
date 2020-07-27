@@ -1,0 +1,523 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+    <!--
+    Rationale: Any source files and text files in general should end with a line separator to let others easily add new
+    content at the end of file and "diff" does not show previous lines as changed.
+    -->
+    <module name="NewlineAtEndOfFile"/>
+    <module name="UniqueProperties"/>
+    <module name="FileLength">
+        <property name="fileExtensions" value="java"/>
+    </module>
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <module name="LineLength">
+        <property name="max" value="120"/>
+    </module>
+    <module name="TreeWalker">
+        <!-- ANNOTATIONS -->
+        <module name="AnnotationLocation"/>
+        <module name="MissingDeprecated"/>
+        <module name="SuppressWarnings"/>
+
+        <!-- BLOCKS -->
+        <!-- Rationale: Nested blocks are often leftovers from the debugging process, they confuse the reader. -->
+        <module name="AvoidNestedBlocks"/>
+
+        <module name="EmptyCatchBlock"/>
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/>
+        <module name="RightCurly"/>
+        <module name="NeedBraces"/>
+        <module name="MissingOverride"/>
+
+        <!-- CLASS DESIGN -->
+        <module name="FinalClass"/>
+
+        <!--
+        Rationale: Instantiating utility classes does not make sense. Hence the constructors should either be private
+        or (if you want to allow subclassing) protected. A common mistake is forgetting to hide the default constructor.
+        -->
+        <module name="HideUtilityClassConstructor"/>
+        <module name="InnerTypeLast"/>
+
+        <!--
+        Rationale: According to Bloch, an interface should describe a type. It is therefore inappropriate to define an
+        interface that does not contain any methods but only constants.
+        -->
+        <module name="InterfaceIsType"/>
+
+        <!--
+        Rationale: Exception instances should represent an error condition. Having non final fields not only allows the
+        state to be modified by accident and therefore mask the original condition but also allows developers to
+        accidentally forget to set the initial state. In both cases, code catching the exception could draw incorrect
+        conclusions based on the state.
+        -->
+        <module name="MutableException"/>
+        <module name="OneTopLevelClass"/>
+
+        <!--
+        Rationale: Exceptions form part of a method's interface. Declaring a method to throw too many differently
+        rooted exceptions makes exception handling onerous and leads to poor programming practices such as writing code
+        like catch(Exception ex). 4 is the empirical value which is based on reports that we had for the
+        ThrowsCountCheck over big projects such as OpenJDK. This check also forces developers to put exceptions into a
+        hierarchy such that in the simplest case, only one type of exception need be checked for by a caller but any
+        subclasses can be caught specifically if necessary.For more information on rules for the exceptions and their
+        issues, see Effective Java: Programming Language Guide Second Edition by Joshua Bloch pages 264-273.
+        -->
+        <module name="ThrowsCount"/>
+
+        <!-- Rationale: Enforce encapsulation.-->
+        <module name="VisibilityModifier">
+            <property name="protectedAllowed" value="true"/>
+        </module>
+
+        <!-- CODING -->
+
+        <!--
+        Rationale: Putting this comma in makes it easier to change the order of the elements or add new elements on the
+        end. Main benefit of a trailing comma is that when you add new entry to an array, no surrounding lines are changed.
+        -->
+        <module name="ArrayTrailingComma"/>
+
+        <!--
+        Rationale: Programmers sometimes mistakenly use the type of their class Foo as the type of the parameter to
+        equals(). This kind of bug is not obvious because it looks correct, and in circumstances where the class is
+        accessed through the references of the class type (rather than a supertype), it will work correctly. However,
+        the first time it is used in a container, the behavior might be mysterious. For these reasons, this type of bug
+        can elude testing and code inspections.
+        -->
+        <module name="CovariantEquals"/>
+        <module name="DeclarationOrder"/>
+
+        <!--
+        Rationale: Java allows default anywhere within the switch statement. But it is more readable if it comes after
+        the last case.
+        -->
+        <module name="DefaultComesLast"/>
+        <module name="EmptyStatement"/>
+
+        <!--
+        Rationale: Calling the equals() method on String literals will avoid a potential NullPointerException. Also, it
+        is pretty common to see null checks right before equals comparisons, which is not necessary in the example below.
+        -->
+        <module name="EqualsAvoidNull"/>
+
+        <!--
+        Rationale: The contract of equals() and hashCode() requires that equal objects have the same hashCode.
+        Therefore, whenever you override equals() you must override hashCode() to ensure that your class can be used in
+        hash-based collections.
+        -->
+        <module name="EqualsHashCode"/>
+        <module name="FallThrough"/>
+        <module name="FinalLocalVariable">
+            <property name="validateEnhancedForLoopVariable" value="true"/>
+        </module>
+        <module name="FinalParameters">
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF, LITERAL_CATCH, FOR_EACH_CLAUSE"/>
+        </module>
+        <module name="HiddenField">
+            <property name="ignoreConstructorParameter" value="true"/>
+            <property name="ignoreSetter" value="true"/>
+            <property name="setterCanReturnItsClass" value="true"/>
+        </module>
+
+        <!--
+        Rationale: catching java.lang.Exception, java.lang.Error or java.lang.RuntimeException is almost never
+        acceptable. Novice developers often simply catch Exception in an attempt to handle multiple exception classes.
+        This unfortunately leads to code that inadvertently catches NullPointerException, OutOfMemoryError, etc.
+        -->
+        <!--<module name="IllegalCatch"/>-->
+
+        <!--
+        Rationale: Depending on the project, for some classes it might be preferable to create instances through
+        factory methods rather than calling the constructor.
+        -->
+        <module name="IllegalThrows"/>
+
+        <!--
+        Copied from Checkstyle internal config...
+        Rationale: Certain language features can harm readability, lead to confusion or are not obvious to
+        novice developers. Other features may be discouraged in certain frameworks, such as not having native
+        methods in Enterprise JavaBeans components.
+        -->
+        <module name="IllegalToken">
+            <property name="tokens" value="LABELED_STAT"/>
+            <property name="tokens" value="LITERAL_NATIVE"/>
+            <property name="tokens" value="LITERAL_VOLATILE"/>
+            <property name="tokens" value="LITERAL_ASSERT"/>
+        </module>
+
+        <!-- Copied from Google's checkstyle config... -->
+        <module name="IllegalTokenText">
+            <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
+            <property name="format"
+                      value="\\u00(09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
+            <property name="message"
+                      value="Consider using special escape sequence instead of octal value or Unicode escaped value."/>
+        </module>
+        <module name="InnerAssignment"/>
+        <module name="MagicNumber"/>
+
+        <!--
+        Rationale: It's usually a good idea to introduce a default case in every switch statement. Even if the developer
+        is sure that all currently possible cases are covered, this should be expressed in the default branch, e.g. by
+        using an assertion. This way the code is protected against later changes, e.g. introduction of new types in an
+        enumeration type.
+        -->
+        <module name="MissingSwitchDefault"/>
+
+        <!--
+        Rationale: If the control variable is modified inside the loop body, the program flow becomes more difficult to follow
+        -->
+        <module name="ModifiedControlVariable"/>
+
+        <!--
+        Rationale: Code duplication makes maintenance more difficult, so it can be better to replace the multiple
+        occurrences with a constant.
+        -->
+        <module name="MultipleStringLiterals">
+            <property name="allowedDuplicates" value="3"/>
+            <property name="ignoreStringsRegexp" value='^".{0,4}"$'/>
+        </module>
+        <module name="MultipleVariableDeclarations"/>
+
+        <!--
+        Rationale: Anything deeper than 2 for loops indicates an algorithmic issue. Time complexity of programs with
+        three nested loops could be approaching n^3
+        -->
+        <module name="NestedForDepth">
+            <property name="max" value="2"/>
+        </module>
+
+        <!--
+        Rationale: Anything deeper than 3 if conditions starts to become too difficult to read.
+        -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+
+        <!--
+        Rationale: The clone method relies on strange, hard to follow rules that are difficult to get right and do not
+        work in all situations. In some cases, either a copy constructor or a static factory method can be used instead
+        of the clone method to return copies of an object. For more information on rules for the clone method and its
+        issues, see Effective Java: Programming Language Guide First Edition by Joshua Bloch pages 45-52.
+        -->
+        <module name="NoClone"/>
+
+        <!--
+        Rationale: Finalizers are unpredictable, often dangerous, and generally unnecessary. Their use can cause
+        erratic behavior, poor performance, and portability problems. For more information for the finalize method and
+        its issues, see Effective Java: Programming Language Guide Third Edition by Joshua Bloch, §8.
+        -->
+        <module name="NoFinalizer"/>
+
+        <!--
+        Rationale: It's very difficult to read multiple statements on one line.
+        -->
+        <module name="OneStatementPerLine"/>
+
+        <!--
+        Rationale: Keeping overloaded methods grouped together helps with readability and organization
+        -->
+        <module name="OverloadMethodsDeclarationOrder"/>
+
+        <!--
+        Rationale: Classes that live in the null package cannot be imported. Many novice developers are not aware of this.
+        -->
+        <module name="PackageDeclaration"/>
+
+        <!--
+        Rationale: Parameter assignment is often considered poor programming practice. Forcing developers to declare
+        parameters as final is often onerous. Having a check ensure that parameters are never assigned would give the
+        best of both worlds.
+        -->
+        <module name="ParameterAssignment"/>
+
+        <module name="RequireThis"/>
+
+        <!--
+        Rationale: Too many return points can mean that code is attempting to do too much or may be difficult to understand.
+        -->
+        <module name="ReturnCount">
+            <property name="max" value="5"/>
+            <property name="maxForVoid" value="5"/>
+        </module>
+
+        <!--
+        Rationale: Complex boolean logic makes code hard to understand and maintain.
+        -->
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+        <module name="StringLiteralEquality"/>
+        <module name="VariableDeclarationUsageDistance"/>
+
+        <!-- HEADERS: skipped for now. May need to implement when we have copyright headers -->
+
+        <!-- IMPORTS -->
+        <module name="AvoidStarImport"/>
+
+        <module name="ImportOrder">
+            <property name="option" value="bottom"/>
+            <property name="groups" value="/^java\./,javax,/^com\.mckesson\./,com,io,org"/>
+            <property name="separated" value="true"/>
+            <property name="sortStaticImportsAlphabetically" value="true"/>
+            <property name="useContainerOrderingForStatic" value="true"/>
+        </module>
+
+        <!--
+        Rationale: programs that contain direct calls to the sun.* packages are "not guaranteed to work on all
+        Java-compatible platforms"
+        -->
+        <module name="IllegalImport"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+
+        <!-- JAVADOCS -->
+        <module name="MissingJavadocType"/>
+        <module name="JavadocVariable">
+            <property name="scope" value="public"/>
+        </module>
+        <module name="JavadocMethod">
+            <property name="scope" value="protected"/>
+            <property name="validateThrows" value="true"/>
+        </module>
+        <module name="MissingJavadocMethod">
+            <property name="scope" value="protected"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+        </module>
+        <module name="AtclauseOrder">
+            <property name="violateExecutionOnNonTightHtml" value="true"/>
+        </module>
+        <module name="JavadocParagraph">
+            <property name="violateExecutionOnNonTightHtml" value="true"/>
+        </module>
+        <module name="JavadocStyle">
+            <property name="checkEmptyJavadoc" value="true"/>
+        </module>
+        <module name="JavadocTagContinuationIndentation">
+            <property name="violateExecutionOnNonTightHtml" value="true"/>
+        </module>
+        <module name="JavadocType"/>
+        <module name="NonEmptyAtclauseDescription">
+            <property name="violateExecutionOnNonTightHtml" value="true"/>
+        </module>
+        <module name="SingleLineJavadoc">
+            <property name="violateExecutionOnNonTightHtml" value="true"/>
+        </module>
+        <module name="SummaryJavadoc">
+            <property name="forbiddenSummaryFragments"
+                      value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
+        </module>
+
+        <!-- METRICS -->
+
+        <!--
+         Rationale: Too many conditions leads to code that is difficult to read and hence debug and maintain.
+        -->
+        <module name="BooleanExpressionComplexity"/>
+
+        <!--
+        Rationale: Too large methods and classes are hard to read and costly to maintain. A large NCSS number often
+        means that a method or class has too many responsibilities and/or functionalities which should be decomposed
+        into smaller units.
+        -->
+        <module name="JavaNCSS"/>
+
+        <!-- MISC -->
+        <module name="ArrayTypeStyle"/>
+
+        <!-- Copied from Google config... -->
+        <module name="AvoidEscapedUnicodeCharacters">
+            <property name="allowEscapesForControlCharacters" value="true"/>
+            <property name="allowByTailComment" value="true"/>
+            <property name="allowNonPrintableEscapes" value="true"/>
+        </module>
+        <module name="CommentsIndentation"/>
+        <module name="Indentation">
+            <property name="throwsIndent" value="0"/>
+        </module>
+        <module name="OuterTypeFilename"/>
+        <module name="TodoComment">
+            <property name="format" value="(TODO)|(FIXME)|(todo)|(fixme)" />
+        </module>
+        <module name="UpperEll"/>
+
+        <!-- MODIFIERS -->
+        <module name="ModifierOrder"/>
+
+        <!--
+        Rationale: The Java Language Specification strongly discourages the usage of public and abstract for method
+        declarations in interface definitions as a matter of style.
+        -->
+        <module name="RedundantModifier"/>
+
+        <!-- NAMING CONVENTIONS -->
+        <module name="AbbreviationAsWordInName"/>
+
+        <!-- Allows for log and logger as a valid constant name -->
+        <module name="ConstantName">
+            <property name="format"
+                      value="^log(ger)?$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+        </module>
+        <module name="StaticVariableName">
+            <property name="format" value="^(id)|([a-z][a-z0-9][a-zA-Z0-9]+)$"/>
+        </module>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName">
+            <property name="allowOneCharVarInForLoop" value="true"/>
+        </module>
+
+        <!-- The following were copied from Google config. See the Google Java style guide for rationale -->
+        <module name="CatchParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                     value="Catch parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="ClassTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                     value="Class type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                     value="Interface type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="LambdaParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                     value="Lambda parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                     value="Member name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
+            <message key="name.invalidPattern"
+                     value="Method name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="MethodTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                     value="Method type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <message key="name.invalidPattern"
+                     value="Package name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="ParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                     value="Parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="TypeName">
+            <message key="name.invalidPattern"
+                     value="Type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!-- SIZE VIOLATIONS -->
+
+        <!--
+        Rationale: If an anonymous inner class becomes very long it is hard to understand and to see the flow of the
+        method where the class is defined. Therefore long anonymous inner classes should usually be refactored into a
+        named inner class. See also Bloch, Effective Java, p. 93.
+        -->
+        <module name="AnonInnerLength"/>
+
+        <!-- Copied from Checkstyle internal config... -->
+        <module name="ExecutableStatementCount">
+            <property name="max" value="30"/>
+        </module>
+
+
+
+        <module name="MethodCount"/>
+
+        <!--
+        Rationale: If a method becomes very long it is hard to understand. Therefore long methods should usually be
+        refactored into several individual methods that focus on a specific task.
+        -->
+        <module name="MethodLength"/>
+
+        <!--
+        Rationale: It is considered good practice to only define one outer type per file.
+        -->
+        <module name="OuterTypeNumber"/>
+        <!--
+        Rationale: developer may need to override method with many parameters from 3-rd party library. In this
+        case developer has no control over number of parameters.
+        -->
+        <module name="ParameterNumber">
+            <property name="ignoreOverriddenMethods" value="true"/>
+        </module>
+
+        <!-- WHITESPACE -->
+        <module name="EmptyForInitializerPad"/>
+        <module name="EmptyForIteratorPad"/>
+
+        <!-- Copied from Google config... -->
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+        </module>
+
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
+        <module name="NoLineWrap"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+
+        <!-- Copied from Google config... -->
+        <module name="OperatorWrap">
+            <property name="option" value="EOL"/>
+            <property name="tokens"
+                      value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR,
+                    LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF "/>
+        </module>
+
+        <module name="ParenPad"/>
+
+        <!-- Copied from Google config... -->
+        <module name="SeparatorWrap">
+            <property name="id" value="SeparatorWrapDot"/>
+            <property name="tokens" value="DOT"/>
+            <property name="option" value="nl"/>
+        </module>
+        <module name="SeparatorWrap">
+            <property name="id" value="SeparatorWrapComma"/>
+            <property name="tokens" value="COMMA"/>
+            <property name="option" value="EOL"/>
+        </module>
+        <module name="SeparatorWrap">
+            <!-- ELLIPSIS is EOL until https://github.com/google/styleguide/issues/258 -->
+            <property name="id" value="SeparatorWrapEllipsis"/>
+            <property name="tokens" value="ELLIPSIS"/>
+            <property name="option" value="EOL"/>
+        </module>
+        <module name="SeparatorWrap">
+            <!-- ARRAY_DECLARATOR is EOL until https://github.com/google/styleguide/issues/259 -->
+            <property name="id" value="SeparatorWrapArrayDeclarator"/>
+            <property name="tokens" value="ARRAY_DECLARATOR"/>
+            <property name="option" value="EOL"/>
+        </module>
+        <module name="SeparatorWrap">
+            <property name="id" value="SeparatorWrapMethodRef"/>
+            <property name="tokens" value="METHOD_REF"/>
+            <property name="option" value="nl"/>
+        </module>
+        <module name="SingleSpaceSeparator"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+
+    </module>
+</module>
+

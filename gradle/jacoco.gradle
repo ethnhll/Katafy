@@ -1,0 +1,53 @@
+jacoco {
+    toolVersion '0.8.5'
+    reportsDir file("${buildDir}/reports/jacoco")
+}
+
+jacocoTestReport {
+    dependsOn test
+    afterEvaluate {
+        // this is required to have the report match the test coverage verification
+        classDirectories.setFrom(
+                classDirectories.files.collect {
+                    fileTree(
+                            dir: it,
+                            exclude: [
+                                    '**/Main.class',
+                                    '**/cli/**',
+                            ]
+                    )
+                }
+        )
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+    violationRules {
+        rule {
+            element = 'CLASS'
+            // excludes classes which don't normally get tested
+            excludes = [
+                    '*.cli.*',
+                    '*.Main',
+            ]
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.900
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.800
+            }
+        }
+    }
+    // If this runs before jacocoTestReport and it fails, report will not be created
+    mustRunAfter jacocoTestReport
+}
+
+task coverage {
+    dependsOn jacocoTestReport
+    dependsOn jacocoTestCoverageVerification
+}

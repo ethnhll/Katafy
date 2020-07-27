@@ -1,0 +1,59 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'com.github.spotbugs' version '3.0.0'
+}
+
+apply from: 'gradle/checkstyle.gradle'
+apply from: 'gradle/jacoco.gradle'
+apply from: 'gradle/spotbugs.gradle'
+
+repositories {
+        jcenter()
+}
+
+dependencies {
+    implementation 'com.beust:jcommander:1.71'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+}
+
+group 'com.ethnhll'
+version '0.1.0'
+
+java {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+
+application {
+    mainClassName "${project.group}.katafy.Main"
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': application.mainClassName,
+        )
+    }
+}
+
+test {
+    // use JUnit5
+    useJUnitPlatform()
+}
+
+task quality {
+    dependsOn style
+    dependsOn coverage
+    dependsOn bugs
+//    dependsOn analyze
+}
+
+// Make adjustments to 'check' task to depend on quality as a whole
+check.setDependsOn(check.taskDependencies.getDependencies() - checkstyleMain - checkstyleTest)
+check.setDependsOn(check.taskDependencies.getDependencies() - spotbugsMain - spotbugsTest)
+check.dependsOn quality

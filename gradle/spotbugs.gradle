@@ -1,0 +1,49 @@
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.stream.StreamResult
+import javax.xml.transform.stream.StreamSource
+
+import static org.gradle.api.tasks.PathSensitivity.NONE
+
+configurations {
+    spotbugsStylesheets {
+        transitive false
+    }
+}
+
+dependencies {
+    spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.4.7'
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+    spotbugsStylesheets "com.github.spotbugs:spotbugs:$spotbugs.toolVersion"
+}
+
+spotbugs {
+    toolVersion '4.0.0'
+    effort 'max'
+    // defer failures
+    ignoreFailures true
+//    excludeFilterConfig = resources.text.fromUri(GITHUB PAGE WITH RULE EXCLUSIONS)
+    spotbugsMain.reports {
+        xml.withMessages true
+        html.stylesheet resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
+    }
+}
+
+spotbugsMain {
+    task "SpotBugsHtmlReport" {
+        def input = reports.xml.destination
+        inputs.files fileTree(input) withPropertyName 'input' withPathSensitivity NONE skipWhenEmpty()
+        def output = file input.absolutePath.replaceFirst(/\.xml$/, '.html')
+        outputs.file output withPropertyName 'output'
+        doLast {
+            def factory = TransformerFactory.newInstance()
+            def transformer = factory.newTransformer new StreamSource(reports.html.stylesheet.asFile())
+            transformer.transform new StreamSource(input), new StreamResult(output)
+        }
+    }
+    spotbugsMain.finalizedBy 'SpotBugsHtmlReport'
+}
+
+task bugs {
+    dependsOn spotbugsMain
+    // specifically excluding spotbugsTest, as we don't care to analyze test code
+}
