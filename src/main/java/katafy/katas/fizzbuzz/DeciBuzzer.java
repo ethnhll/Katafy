@@ -1,7 +1,5 @@
 package katafy.katas.fizzbuzz;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class DeciBuzzer implements FizzBuzzer {
 
     @Override
