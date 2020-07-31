@@ -30,3 +30,8 @@ jobs:
       run: ./gradlew bugs
     - name: Checkstyle report
       run: ./gradlew style
+
+    - name: Code Quality report with Sonar
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./gradlew sonarqube

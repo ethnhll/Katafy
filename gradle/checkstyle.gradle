@@ -1,8 +1,8 @@
 checkstyle {
-    toolVersion '8.29'
+    toolVersion = '8.35'
 //    config = resources.text.fromUri('GITHUB RESOURCE URI TO rules')
     // defer failures
-    ignoreFailures true
+    ignoreFailures = true
 }
 
 task style {
