@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'jacoco'
+    id 'pmd'
     id 'com.github.spotbugs' version '4.4.4'
     id 'org.sonarqube' version '3.0'
 }
@@ -11,6 +12,7 @@ apply from: 'gradle/checkstyle.gradle'
 apply from: 'gradle/jacoco.gradle'
 apply from: 'gradle/spotbugs.gradle'
 apply from: 'gradle/sonarqube.gradle'
+apply from: 'gradle/pmd.gradle'
 
 repositories {
         jcenter()
@@ -52,9 +54,11 @@ task quality {
     dependsOn coverage
     dependsOn bugs
     dependsOn style
+    dependsOn analyze
 }
 
 // Make adjustments to 'check' task to depend on quality as a whole
 check.setDependsOn(check.taskDependencies.getDependencies() - checkstyleMain - checkstyleTest)
 check.setDependsOn(check.taskDependencies.getDependencies() - spotbugsMain - spotbugsTest)
+check.setDependsOn(check.taskDependencies.getDependencies() - pmdMain - pmdTest)
 check.dependsOn quality
