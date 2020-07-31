@@ -1,0 +1,22 @@
+pmd {
+    toolVersion = '6.26.0'
+    consoleOutput = true
+    // defer failures
+    ignoreFailures = true
+}
+
+pmdTest {
+    // We don't really care to examine test files
+    enabled = false
+}
+
+pmdMain {
+    reports {
+        html.enabled
+        xml.enabled
+    }
+}
+
+task analyze {
+    dependsOn(pmdMain)
+}
