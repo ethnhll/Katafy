@@ -33,6 +33,8 @@ jobs:
       run: ./gradlew bugs
     - name: Checkstyle report
       run: ./gradlew style
+    - name: PMD report
+      run: ./gradlew analyze
 
     - name: Code Quality report with Sonar
       env:
