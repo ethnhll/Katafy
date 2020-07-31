@@ -47,9 +47,9 @@ test {
 }
 
 task quality {
-    dependsOn style
     dependsOn coverage
     dependsOn bugs
+    dependsOn style
 //    dependsOn analyze
 }
 
