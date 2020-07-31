@@ -33,5 +33,6 @@ jobs:
 
     - name: Code Quality report with Sonar
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: ./gradlew sonarqube
