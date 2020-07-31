@@ -10,6 +10,7 @@ plugins {
 apply from: 'gradle/checkstyle.gradle'
 apply from: 'gradle/jacoco.gradle'
 apply from: 'gradle/spotbugs.gradle'
+apply from: 'gradle/sonarqube.gradle'
 
 repositories {
         jcenter()
