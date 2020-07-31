@@ -9,6 +9,9 @@ public class DeciBuzzer implements FizzBuzzer {
         if (number.isEmpty()){
             return "";
         }
+        if (number.isEmpty()){
+            return "";
+        }
         if (Integer.parseInt(number) % 3 == 0){
             outString += "fizz";
         }
@@ -18,6 +21,7 @@ public class DeciBuzzer implements FizzBuzzer {
         if (outString.isEmpty()){
             outString += number;
         }
+
 
         return outString;
 
