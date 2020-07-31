@@ -23,7 +23,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.11.1'
 }
 
-group ''
+group 'ethnhll'
 version '0.1.0'
 
 java {
