@@ -25,26 +25,26 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
     dependsOn test
-    violationRules {
-        rule {
-            element = 'CLASS'
-            // excludes classes which don't normally get tested
-            excludes = [
-                    '*.cli.*',
-                    '*.Main',
-            ]
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.900
-            }
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.800
-            }
-        }
-    }
+//    violationRules {
+//        rule {
+//            element = 'CLASS'
+//            // excludes classes which don't normally get tested
+//            excludes = [
+//                    '*.cli.*',
+//                    '*.Main',
+//            ]
+//            limit {
+//                counter = 'LINE'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.900
+//            }
+//            limit {
+//                counter = 'BRANCH'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.800
+//            }
+//        }
+//    }
     // If this runs before jacocoTestReport and it fails, report will not be created
     mustRunAfter jacocoTestReport
 }
