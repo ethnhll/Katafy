@@ -5,6 +5,7 @@ dependencies {
 spotbugs {
     effort = 'max'
     // defer failures
+    showProgress.set(true)
     ignoreFailures.set(true)
 //    excludeFilterConfig = resources.text.fromUri(GITHUB PAGE WITH RULE EXCLUSIONS)
 }
